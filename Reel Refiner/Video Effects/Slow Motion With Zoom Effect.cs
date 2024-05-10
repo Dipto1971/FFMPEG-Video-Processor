@@ -1,7 +1,7 @@
 ﻿using OpenCvSharp;
 using System.Diagnostics;
 
-namespace ReelRefiner.Video_Effects
+namespace Testing.Video_Effects
 {
     public class Slow_Motion_With_Zoom_Effect
     {

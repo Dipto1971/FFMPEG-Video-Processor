@@ -1,6 +1,4 @@
-﻿using RellRefiner.Utils;
-
-namespace ReelRefiner.Video_Effects
+﻿namespace Testing.Video_Effects
 {
     public class Shake_Effect
     {
@@ -32,8 +30,7 @@ namespace ReelRefiner.Video_Effects
 
             string input = $"-i {inputVideo} -filter_complex \"{shake}\" -map \"[out]\" -c:a copy -y {outputVideo}";
 
-            // Utils.Utils.ExecuteFFmpegCommand(shake);
-            Utils.ExecuteFFmpegCommand(input);
+            Utils.Utils.ExecuteFFmpegCommand(input);
         }
     }
 }

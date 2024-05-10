@@ -2,7 +2,7 @@
   "profiles": {
     "Testing": {
       "commandName": "Project",
-      "commandLineArgs": "-f \"input/hello.mp4\" -o out-1.mp4 -e 1"
+      "commandLineArgs": "-f \"input/input.mp4\" -o output_mixedFruits.mp4 -e 3"
     }
   }
 }
