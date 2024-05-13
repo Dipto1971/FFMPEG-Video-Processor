@@ -4,14 +4,31 @@
     {
         public Mixed_Fruits(string inputVideo, string outputVideo, double duration, int height, int width)
         {
-            string rainbowCollage =
-                //Collage 1 start
-                $"color=black:720x1280 [base]; " +
-                $"[0:v] setpts=PTS-STARTPTS, scale=238:638 [upperleft]; " +
-                $"[0:v] setpts=PTS-STARTPTS, scale=240:639 [upperright]; " +
-                $"[0:v] setpts=PTS-STARTPTS, crop=239:1280:239:0 [Middle]; " +
-                $"[0:v] setpts=PTS-STARTPTS, scale=238:638 [lowerleft]; " +
-                $"[0:v] setpts=PTS-STARTPTS, scale=240:639 [lowerright]; " +
+            double firstSlowDuration = duration * 0.25;
+            double secondSlowStart = firstSlowDuration * 2;
+            double secondSlowEnd = secondSlowStart + 2;
+
+            string command =
+                $"[0:v] trim=start={0}:end={firstSlowDuration},  setpts=2*(PTS-STARTPTS) [slow1];" +
+
+                $"color=black:{width}x{height} [base];" +
+                $"[0:v] trim=start={secondSlowStart}:end={secondSlowEnd}, setpts=2*(PTS-STARTPTS), scale={width / 3 - 2}:{height / 2 - 2} [upperleft];" +
+                $"[0:v] trim=start={secondSlowStart}:end={secondSlowEnd}, setpts=2*(PTS-STARTPTS), scale={width / 3}:{height / 2 - 1} [upperright];" +
+                $"[0:v] trim=start={secondSlowStart}:end={secondSlowEnd}, setpts=2*(PTS-STARTPTS), crop={width / 3 - 1}:{height}:{width / 3 - 1}:{0} [Middle];" +
+                $"[0:v] trim=start={secondSlowStart}:end={secondSlowEnd}, setpts=2*(PTS-STARTPTS), scale={width / 3 - 2}:{height / 2 - 2} [lowerleft];" +
+                $"[0:v] trim=start={secondSlowStart}:end={secondSlowEnd}, setpts=2*(PTS-STARTPTS), scale={width / 3}:{height / 2 - 1} [lowerright];" +
+
+                $"[base][Middle] overlay=shortest=1:x={width / 3}:y={0} [tmp1];" +
+                $"[tmp1][upperright] overlay=shortest=1:x={width / 3 * 2}:y={0} [tmp2];" +
+                $"[tmp2][upperleft] overlay=shortest=1:x={1}:y={1} [tmp3];" +
+                $"[tmp3][lowerleft] overlay=shortest=1:x={0}:y={height / 2} [tmp4];" +
+                $"[tmp4][lowerright] overlay=shortest=1:x={width / 3 * 2}:y={height / 2} [collage];" +
+
+                $"[slow1][collage] concat=n=2:v=1:a=0 [out]";
+
+
+
+                string rainbowCollage =
 
                 $"[base][Middle] overlay=shortest=1:x=240:y=0 [tmp1]; " +
                 $"[tmp1][upperright] overlay=shortest=1:x=480:y=0 [tmp2]; " +
@@ -40,8 +57,9 @@
                 $"";
 
 
-            string input = $"-i {inputVideo} -filter_complex \"{rainbowCollage}\" -map \"[out]\" -c:a copy -y {outputVideo}";
+            string input = $"-i {inputVideo} -filter_complex \"{command}\" -map \"[out]\" -c:a copy -y {outputVideo}";
 
             Utils.Utils.ExecuteFFmpegCommand(input);
         }
     }
+}
