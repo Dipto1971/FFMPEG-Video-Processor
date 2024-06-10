@@ -82,6 +82,14 @@ namespace Testing.Utils
             }
         }
 
+        public static int GetFps(string inputPath)
+        {
+            using (var cap = new VideoCapture(inputPath))
+            {
+                int fps = (int)cap.Fps;
+                return fps; 
+            }
+        }
 
         public static void ApplySlowMotion(string inputPath, string outputPath, double startSeconds, double endSeconds)
         {
