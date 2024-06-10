@@ -5,7 +5,6 @@
         public Mixed_Fruits(string inputVideo, string outputVideo, double duration, int fps, int height, int width)
         {
             fps = 25;
-            int scalingDecrementValue = 40;
             double firstSlowDuration = duration * 0.25;
 
             double secondSlowStart = firstSlowDuration;
